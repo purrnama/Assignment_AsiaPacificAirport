@@ -93,7 +93,7 @@ public class Aircraft extends Thread {
 			String departureMsg = this.getName() + ": Asia Pacific Tower, requesting to depart.";
 			DepartureRequestMessage departureRequest = new DepartureRequestMessage(this, false, departureMsg);
 			atcQueue.send(departureRequest);
-			System.out.println(arrivalMsg);
+			System.out.println(departureMsg);
 			// wait to receive departure permission from request
 			synchronized (departureRequest) {
 				try {

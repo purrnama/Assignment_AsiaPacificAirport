@@ -5,7 +5,7 @@ public class AirTrafficControl extends Thread {
 	private Gate[] gates;
 	private Runway runway;
 	private ArrivalDepartureProcess arrivalDeparture;
-	private RunwayProcess runwayProcess;;
+	private RunwayProcess runwayProcess;
 
 	public AirTrafficControl(Gate[] gates, Runway runway) {
 		this.msgQueue = new MessageQueue(10);

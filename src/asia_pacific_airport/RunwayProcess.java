@@ -21,7 +21,7 @@ public class RunwayProcess extends Thread {
 		try {
 			while (running) {
 				Thread.sleep(1000);
-				// wait for runway to be free before
+				// wait for runway to be free before catering any requests
 				while (runway.isOccupied()) {
 					try {
 						System.out.println(this.getName() + ": Waiting for runway to clear.");

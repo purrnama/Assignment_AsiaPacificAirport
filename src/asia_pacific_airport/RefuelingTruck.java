@@ -41,6 +41,31 @@ public class RefuelingTruck extends Thread {
 		}
 	}
 
+	public void refuelProcess(RefuelingRequestMessage req) {
+		synchronized (req) {
+			if (req.getAircraft().getRequiredFuel() > this.fuelCapacity) {
+				returnToBase("Insufficient fuel. Available fuel: " + this.fuelCapacity + ", Required fuel: "
+						+ req.getAircraft().getRequiredFuel());
+			}
+			goToGate(req.getGate());
+			refuelAircraft(req.getAircraft());
+			req.notify();
+		}
+	}
+
+	private void refuelAircraft(Aircraft aircraft) {
+		try {
+			System.out.println(this.getName() + ": Refueling " + aircraft.getName());
+			while (aircraft.getRequiredFuel() > 0) {
+				Thread.sleep(50);
+				aircraft.refuel(1);
+				this.fuelCapacity--;
+			}
+		} catch (InterruptedException e) {
+
+		}
+	}
+
 	private void goToGate(Gate gate) {
 		try {
 			if (currentGate != gate) {
@@ -70,33 +95,8 @@ public class RefuelingTruck extends Thread {
 		}
 	}
 
-	private void refuelAircraft(Aircraft aircraft) {
-		try {
-			System.out.println(this.getName() + ": Refueling " + aircraft.getName());
-			while (aircraft.getRequiredFuel() > 0) {
-				Thread.sleep(50);
-				aircraft.refuel(1);
-				this.fuelCapacity--;
-			}
-		} catch (InterruptedException e) {
-
-		}
-	}
-
 	public MessageQueue getMessageQueue() {
 		return queue;
-	}
-
-	public void refuelProcess(RefuelingRequestMessage req) {
-		synchronized (req) {
-			if (req.getAircraft().getRequiredFuel() > this.fuelCapacity) {
-				returnToBase("Insufficient fuel. Available fuel: " + this.fuelCapacity + ", Required fuel: "
-						+ req.getAircraft().getRequiredFuel());
-			}
-			goToGate(req.getGate());
-			refuelAircraft(req.getAircraft());
-			req.notify();
-		}
 	}
 
 	public void stopRunning() {
